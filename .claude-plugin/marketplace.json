@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "codex-review",
+  "description": "Codex review loop plugin marketplace.",
+  "owner": {
+    "name": "bpteam",
+    "url": "https://github.com/bpteam"
+  },
+  "plugins": [
+    {
+      "name": "codex-review",
+      "description": "Codex CLI reviews every PR; Claude fixes or argues each finding until it is ready; the owner only merges.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}
