@@ -16,7 +16,21 @@ in its `AGENTS.md`.
 | [`skills/pr-review-loop/`](skills/pr-review-loop/SKILL.md) | one round of the loop on a PR; run as `/loop /codex-review:pr-review-loop <number>` |
 | [`skills/pr-review-loop/codex-review.sh`](skills/pr-review-loop/codex-review.sh) | runs Codex (`gpt-6-luna`, effort `high`, read-only sandbox, JSON by [`review-output.schema.json`](skills/pr-review-loop/review-output.schema.json)) on the pushed PR head against the PR's base; writes a comment ready to post |
 | [`hooks/review-gate.sh`](hooks/review-gate.sh) | Stop hook: a session may not finish while the open PR of its branch has no answered Codex review of its head; passes in a repository without `doc/review-loop.md` or `docs/review-loop.md` |
+| [`commands/`](commands/) | the commands below |
 | [`tests/run.sh`](tests/run.sh) | tests of the hook and the script with fake `gh` and `codex` |
+
+## Commands
+
+| Command | What |
+|---|---|
+| `/codex-review:setup` | set the loop up in this repository (skill `codex-review-setup`) |
+| `/codex-review:loop [PR]` | run the loop on a PR until it is ready or stops |
+| `/codex-review:review [PR]` | one Codex review of the PR head now, posted; no fixes |
+| `/codex-review:status [PR]` | rounds used, last verdict, unanswered findings, what the Stop hook says, next step |
+| `/codex-review:reset-rounds <PR> <decision>` | the owner's decision on an escalation; the round count restarts |
+| `/codex-review:stop <PR> <why>` | stop the loop: `Loop stopped:` with the open findings and both positions |
+| `/codex-review:doctor` | can the loop run here: Codex CLI, login, model, `gh`, repo docs, no old copies, not installed twice |
+| `/codex-review:activate` | project settings that offer the plugin to every Claude Code user of the repo (needs the plugin on GitHub) |
 
 ## Requirements
 
