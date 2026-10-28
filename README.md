@@ -15,7 +15,7 @@ in its `AGENTS.md`.
 | [`skills/codex-review-setup/`](skills/codex-review-setup/SKILL.md) | sets the loop up in a repository: guidelines, loop doc, `AGENTS.md` rules, a PR that tests it |
 | [`skills/pr-review-loop/`](skills/pr-review-loop/SKILL.md) | one round of the loop on a PR; run as `/loop /codex-review:pr-review-loop <number>` |
 | [`skills/pr-review-loop/codex-review.sh`](skills/pr-review-loop/codex-review.sh) | runs Codex (`gpt-6-luna`, effort `high`, read-only sandbox, JSON by [`review-output.schema.json`](skills/pr-review-loop/review-output.schema.json)) on the pushed PR head against the PR's base; writes a comment ready to post |
-| [`hooks/review-gate.sh`](hooks/review-gate.sh) | Stop hook: a session may not finish while the open PR of its branch has no answered Codex review of its head; passes in a repository without `doc/review-loop.md` or `docs/review-loop.md` |
+| [`hooks/review-gate.sh`](hooks/review-gate.sh) | Stop hook: a session may not finish while the open PR of its branch has no answered Codex review of its head, or while its branch has changes and no PR; passes in a repository without `doc/review-loop.md` or `docs/review-loop.md` |
 | [`commands/`](commands/) | the commands below |
 | [`tests/run.sh`](tests/run.sh) | tests of the hook and the script with fake `gh` and `codex` |
 

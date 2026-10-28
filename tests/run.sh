@@ -64,7 +64,13 @@ pr_open; comments
 check "PR without review blocks" 2 "$(run_gate)"
 check "stop_hook_active passes" 0 "$(run_gate '{"stop_hook_active":true}')"
 echo "no pull requests found for branch \"feature\"" > "$FAKE/pr.err"
-check "no PR passes" 0 "$(run_gate)"
+check "no PR, commits ahead of main, blocks" 2 "$(run_gate)"
+# A branch with nothing done: main's content plus the loop doc, kept out of git status by info/exclude.
+git switch -q -c idle main && mkdir -p docs && echo loop > docs/review-loop.md && echo docs/ >> .git/info/exclude
+check "no PR, nothing done, passes" 0 "$(run_gate)"
+echo x > untracked
+check "no PR, untracked file, blocks" 2 "$(run_gate)"
+rm -rf untracked docs && sed -i '/^docs\/$/d' .git/info/exclude && git switch -q feature
 echo "HTTP 502" > "$FAKE/pr.err"
 check "gh error blocks" 2 "$(run_gate)"
 pr_open

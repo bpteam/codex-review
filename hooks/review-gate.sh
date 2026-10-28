@@ -2,7 +2,9 @@
 # Stop hook of the codex-review plugin: the agent may not finish while the open PR of its branch has no Codex review
 # of its head. Runs only in a repository that uses the loop (it has doc/review-loop.md or docs/review-loop.md);
 # anywhere else it passes. Approved, or needs-attention followed by "Answers to Codex review of <sha>" or
-# "Loop stopped:" passes. No PR, or no gh (the loop cannot run without it): passes; a gh or network error blocks.
+# "Loop stopped:" passes. A branch with a change (or a commit ahead of the default branch) and no PR blocks: work is
+# handed over as a PR through the loop, never as "shall I open a PR?". A branch with nothing done and no PR, or no gh
+# (the loop cannot run without it): passes; a gh or network error blocks.
 # Blocks once (stop_hook_active), never loops. Registered by hooks/hooks.json of the plugin.
 set -uo pipefail
 
@@ -34,9 +36,18 @@ gate_review() { # the Codex review loop ran on the PR head ($LOOP_DOC)
   branch="$(git rev-parse --abbrev-ref HEAD)"
   [[ "$branch" == "${DEFAULT:-main}" || "$branch" == HEAD ]] && return 0
   out="$(mktemp)"
-  # No PR yet is the only reason to skip; a gh or network error blocks (the review cannot be confirmed).
+  # A gh or network error blocks (the review cannot be confirmed).
   if ! pr="$(gh pr view "$branch" --json number,state,headRefOid 2>"$out")"; then
-    grep -qi 'no pull requests found' "$out" && { rm -f "$out"; return 0; }
+    if grep -qi 'no pull requests found' "$out"; then
+      # Nothing done on the branch (a question answered, an investigation): nothing to hand over. Any status counts,
+      # deletions and untracked files too; so does a commit ahead of the default branch.
+      if [[ -z "$(git status --porcelain 2>/dev/null)" \
+          && -z "$(git log --oneline "origin/${DEFAULT:-main}..HEAD" 2>/dev/null)" ]]; then
+        rm -f "$out"; return 0
+      fi
+      echo "Branch $branch has changes and no PR. Do not ask the owner whether to open one: commit, push, gh pr create, then run the review loop (/loop /codex-review:pr-review-loop <number>; the repo's hard rule \"every PR goes through the Codex review loop\"). Only a question you are truly blocked on stops before that." >"$out"
+      fail review . "git commit && git push -u origin HEAD && gh pr create && /loop /codex-review:pr-review-loop <number>" "$out"
+    fi
     fail review . "gh pr view $branch" "$out"
   fi
   [[ "$(jq -r .state <<<"$pr")" == OPEN ]] || { rm -f "$out"; return 0; }

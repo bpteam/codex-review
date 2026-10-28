@@ -1,6 +1,6 @@
 {
   "name": "codex-review",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Codex review loop for pull requests: the local Codex CLI reviews each PR, Claude fixes or argues every finding (3 rounds at most), the owner only merges.",
   "author": {
     "name": "bpteam",
