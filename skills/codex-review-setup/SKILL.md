@@ -48,7 +48,8 @@ Work in a worktree and a branch like any change; follow the repo's own rules for
 3. `AGENTS.md` (or `CLAUDE.md` when there is no `AGENTS.md`), so every agent in the repo uses the loop on its own:
    - a hard-rule section, in the style of the file's other hard rules:
      `## ⛔ HARD RULE: every PR goes through the Codex review loop; the owner only merges` - after opening a PR the
-     author agent runs the loop every time without being asked (Claude Code: `/loop /pr-review-loop <number>`,
+     author agent runs the loop every time without being asked (Claude Code: `/loop /codex-review:pr-review-loop <number>`, or `/loop /pr-review-loop <number>` while the
+     skill is linked into `~/.claude/skills`;
      other agents: the repo's `review-loop.md` by hand); review, post, fix or argue every finding, push, again until
      `approve` or every finding left is answered with a reason, at most 3 rounds; then `gh pr ready` and one notice
      listing the findings left open; the owner is not asked to look before that, except when the

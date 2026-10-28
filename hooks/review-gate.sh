@@ -42,8 +42,8 @@ gate_review() { # the Codex review loop ran on the PR head ($LOOP_DOC)
   [[ "$(jq -r .state <<<"$pr")" == OPEN ]] || { rm -f "$out"; return 0; }
   num="$(jq -r .number <<<"$pr")" head="$(jq -r .headRefOid <<<"$pr")"
   if [[ "$(git rev-parse HEAD)" != "$head" ]]; then
-    echo "Local HEAD is not the head of PR #$num: push, then run /loop /pr-review-loop $num." >"$out"
-    fail review . "git push && /loop /pr-review-loop $num" "$out"
+    echo "Local HEAD is not the head of PR #$num: push, then run the review loop: /loop /codex-review:pr-review-loop $num (or /loop /pr-review-loop $num without the plugin)." >"$out"
+    fail review . "git push && /loop /codex-review:pr-review-loop $num" "$out"
   fi
   tree="$(git rev-parse "$head^{tree}")"
   # Newest review whose commit has the same tree as the PR head (a squash keeps the tree, not the sha).
@@ -65,7 +65,7 @@ gate_review() { # the Codex review loop ran on the PR head ($LOOP_DOC)
   done < <(jq -c '.' <<<"$comments")
   if [[ -z "$sha" ]]; then
     echo "PR #$num head ${head:0:7} has no Codex review. Run the review loop before finishing (AGENTS.md hard rule)." >"$out"
-    fail review . "/loop /pr-review-loop $num" "$out"
+    fail review . "/loop /codex-review:pr-review-loop $num (or /loop /pr-review-loop $num without the plugin)" "$out"
   fi
   [[ "$verdict" == "**Verdict: approve**" ]] && { rm -f "$out"; return 0; }
   # needs-attention: every finding answered (soft rule), or the loop stopped and told the owner. Only comments posted
@@ -75,7 +75,7 @@ gate_review() { # the Codex review loop ran on the PR head ($LOOP_DOC)
     rm -f "$out"; return 0
   fi
   echo "Codex review of $sha on PR #$num is needs-attention and no 'Answers to Codex review of $sha' comment exists. Fix or answer every finding ($LOOP_DOC)." >"$out"
-  fail review . "/loop /pr-review-loop $num" "$out"
+  fail review . "/loop /codex-review:pr-review-loop $num (or /loop /pr-review-loop $num without the plugin)" "$out"
 }
 
 gate_review
