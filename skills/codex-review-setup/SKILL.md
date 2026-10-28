@@ -10,7 +10,7 @@ finding (fix with a test, or a reason why not) until Codex says `approve` (3 rou
 The loop's code is shared, not copied into repositories: this plugin (`codex-review`) holds the round skill
 `pr-review-loop` with `codex-review.sh` and its schema, and the Stop hook `hooks/review-gate.sh`. A repository keeps
 only what is its own: `review-guidelines.md`, `review-loop.md` (in `doc/` or `docs/`, whichever it uses) and the
-rules in its `AGENTS.md`. Reference: repos `Noitadnuof/reviva` (`doc/`) and `bpteam/prosopon` (`docs/`).
+rules in its `AGENTS.md`.
 
 ## Facts that shaped it (do not rediscover)
 

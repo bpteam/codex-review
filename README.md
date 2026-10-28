@@ -40,12 +40,14 @@ Knobs: `CODEX_REVIEW_MODEL`, `CODEX_REVIEW_EFFORT`, `CODEX_REVIEW_BASE`, `CODEX_
 
 ## Install
 
-As a plugin (from this checkout, or from GitHub once it is pushed there):
+As a plugin:
 
 ```
-/plugin marketplace add ~/p/codex-review
+/plugin marketplace add bpteam/codex-review
 /plugin install codex-review@codex-review
 ```
+
+From a local checkout instead: `/plugin marketplace add <path to the checkout>`.
 
 Before that, the same files are used from this checkout without the plugin system: `~/.claude/skills/pr-review-loop`
 and `~/.claude/skills/codex-review-setup` are symlinks to `skills/*`, and `~/.claude/settings.json` registers
@@ -53,7 +55,7 @@ and `~/.claude/skills/codex-review-setup` are symlinks to `skills/*`, and `~/.cl
 or the hook runs twice and the skills show up twice.
 
 Other agents (Codex, a human) run the loop by hand from the repository's `review-loop.md`, with the script at
-`skills/pr-review-loop/codex-review.sh` of this checkout.
+`skills/pr-review-loop/codex-review.sh` of the installed plugin or a checkout.
 
 ## Test
 

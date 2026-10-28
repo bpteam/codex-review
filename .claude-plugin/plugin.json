@@ -7,5 +7,12 @@
     "url": "https://github.com/bpteam"
   },
   "license": "MIT",
-  "keywords": ["code-review", "codex", "pull-request", "review-loop"]
+  "keywords": [
+    "code-review",
+    "codex",
+    "pull-request",
+    "review-loop"
+  ],
+  "repository": "https://github.com/bpteam/codex-review",
+  "homepage": "https://github.com/bpteam/codex-review"
 }
